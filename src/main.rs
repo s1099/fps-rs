@@ -9,7 +9,7 @@ fn main() {
         .add_systems(
             Update,
             (
-                components::player::move_player,
+                components::player::player_view,
                 components::player::player_movement,
             ),
         )

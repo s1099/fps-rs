@@ -75,7 +75,7 @@ pub fn spawn_player(
         });
 }
 
-pub fn move_player(
+pub fn player_view(
     accumulated_mouse_motion: Res<AccumulatedMouseMotion>,
     player: Single<(&mut Transform, &CameraSensitivity), With<Player>>,
 ) {
