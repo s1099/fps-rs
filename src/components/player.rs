@@ -1,28 +1,6 @@
 use std::f32::consts::FRAC_PI_2;
-
-use bevy::{
-    asset::Assets,
-    color::{palettes::tailwind, Color},
-    core_pipeline::core_3d::Camera3d,
-    ecs::{
-        component::Component,
-        query::With,
-        system::{Commands, Query, Res, ResMut, Single},
-    },
-    hierarchy::{BuildChildren, ChildBuild},
-    input::{keyboard::KeyCode, mouse::AccumulatedMouseMotion, ButtonInput},
-    math::{primitives::Cuboid, EulerRot, Quat, Vec2, Vec3},
-    pbr::{MeshMaterial3d, NotShadowCaster, StandardMaterial},
-    prelude::{Deref, DerefMut},
-    render::{
-        camera::{Camera, PerspectiveProjection, Projection},
-        mesh::{Mesh, Mesh3d},
-        view::{RenderLayers, Visibility},
-    },
-    time::Time,
-    transform::components::Transform,
-    utils::default,
-};
+use bevy::{color::palettes::tailwind, input::mouse::AccumulatedMouseMotion, pbr::NotShadowCaster, prelude::*, render::view::RenderLayers};
+use avian3d::prelude::*;
 
 #[derive(Debug, Component)]
 pub struct Player;
@@ -37,7 +15,7 @@ impl Default for CameraSensitivity {
 }
 
 #[derive(Debug, Component)]
-struct WorldModelCamera;
+pub struct WorldModelCamera;
 
 #[derive(Debug, Component)]
 pub struct MovementSpeed(pub f32);
@@ -57,6 +35,9 @@ pub fn spawn_player(
             MovementSpeed(5.0),
             Transform::from_xyz(0.0, 1.0, 0.0),
             Visibility::default(),
+            Collider::capsule(0.5, 1.2),
+            RigidBody::Dynamic,
+            LockedAxes::ROTATION_LOCKED,
         ))
         .with_children(|parent| {
             parent.spawn((
@@ -81,7 +62,7 @@ pub fn spawn_player(
                 RenderLayers::layer(1),
             ));
 
-            // right arm
+            // gun in right arm
             parent.spawn((
                 Mesh3d(arm),
                 MeshMaterial3d(arm_material),

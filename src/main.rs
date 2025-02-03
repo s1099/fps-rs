@@ -1,26 +1,10 @@
 mod components;
-use bevy::app::Update;
-use bevy::color::palettes::tailwind;
-use bevy::color::Color;
-use bevy::pbr::PointLight;
-use bevy::prelude::Startup;
-use bevy::render::view::RenderLayers;
-use bevy::transform::components::Transform;
-use bevy::{
-    app::App,
-    asset::{AssetServer, Assets},
-    color::Srgba,
-    ecs::system::{Commands, Res, ResMut},
-    math::primitives::{Cuboid, Plane3d},
-    pbr::{MeshMaterial3d, StandardMaterial},
-    render::mesh::{Mesh, Mesh3d, Meshable},
-    utils::default,
-    DefaultPlugins,
-};
+use avian3d::prelude::*;
+use bevy::{color::palettes::tailwind, prelude::*, render::view::RenderLayers};
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
+        .add_plugins((DefaultPlugins, PhysicsPlugins::default()))
         .add_systems(Startup, (setup, components::player::spawn_player))
         .add_systems(
             Update,
@@ -44,6 +28,8 @@ fn setup(
             base_color: Srgba::hex("#e1ed5f").unwrap().into(),
             ..default()
         })),
+        RigidBody::Static,
+        Collider::cuboid(20.0, 0.1, 20.0),
     ));
 
     for x in -2..3 {
@@ -55,9 +41,20 @@ fn setup(
                     ..default()
                 })),
                 Transform::from_xyz(x as f32 * 2.0, 0.5, z as f32 * 2.0),
+                RigidBody::Dynamic,
+                Collider::cuboid(1.0, 1.0, 1.0),
             ));
         }
     }
+
+    commands.spawn((
+        Mesh3d(meshes.add(Capsule3d::new(1.0, 3.0).mesh())),
+        MeshMaterial3d(materials.add(StandardMaterial {
+            base_color: Srgba::hex("#f6ad55").unwrap().into(),
+            ..default()
+        })),
+        Transform::from_xyz(0.0, 5.0, 0.0),
+    ));
 
     commands.spawn((
         PointLight {
