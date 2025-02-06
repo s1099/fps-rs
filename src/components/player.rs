@@ -1,6 +1,9 @@
-use std::f32::consts::FRAC_PI_2;
-use bevy::{color::palettes::tailwind, input::mouse::AccumulatedMouseMotion, pbr::NotShadowCaster, prelude::*, render::view::RenderLayers};
 use avian3d::prelude::*;
+use bevy::{
+    color::palettes::tailwind, input::mouse::AccumulatedMouseMotion, pbr::NotShadowCaster,
+    prelude::*, render::view::RenderLayers,
+};
+use std::f32::consts::FRAC_PI_2;
 
 #[derive(Debug, Component)]
 pub struct Player;
