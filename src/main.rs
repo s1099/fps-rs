@@ -9,14 +9,17 @@ use bevy::{
 
 fn main() {
     App::new()
-        .add_plugins((DefaultPlugins.set(WindowPlugin {
-            primary_window: Some(Window {
-                resizable: false,
-                mode: WindowMode::BorderlessFullscreen(MonitorSelection::Primary),
+        .add_plugins((
+            DefaultPlugins.set(WindowPlugin {
+                primary_window: Some(Window {
+                    resizable: false,
+                    mode: WindowMode::BorderlessFullscreen(MonitorSelection::Primary),
+                    ..default()
+                }),
                 ..default()
             }),
-            ..default()
-        }), PhysicsPlugins::default()))
+            PhysicsPlugins::default(),
+        ))
         .add_systems(Startup, (setup, components::player::spawn_player))
         .add_systems(
             Update,
