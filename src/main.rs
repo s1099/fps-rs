@@ -6,6 +6,7 @@ use bevy::{
     render::view::RenderLayers,
     window::{CursorGrabMode, WindowMode},
 };
+use components::player::systems::{player_movement, player_view};
 
 fn main() {
     App::new()
@@ -21,15 +22,13 @@ fn main() {
             PhysicsPlugins::default(),
         ))
         .add_systems(Startup, (setup, components::player::spawn_player))
-        .add_systems(
-            Update,
-            (
-                components::player::player_view,
-                components::player::player_movement,
-                toggle_cursor,
-            ),
-        )
+        .add_systems(Update, (
+            player_movement,
+            player_view,
+            toggle_cursor
+        ))
         .run();
+    
 }
 
 fn setup(
